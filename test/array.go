@@ -11,16 +11,6 @@ func main() {
 
 }
 
-//slide 的拓展
-func expand() {
-	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
-	s1 := arr[2:6]
-	s2 := s1[3:5]
-
-	fmt.Println(s1)
-	fmt.Println(s2)
-}
-
 //map 例题：寻找最长不含有重复字符的子串
 /*例如		abcabcbb  ->  abc
 bbbbbb ->  b
@@ -41,4 +31,14 @@ func lengthOfNonRepeatingSubStr(s string) int {
 		lastOccurred[ch] = i
 	}
 	return maxLength
+}
+
+//slide 的拓展
+func expand() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:6]
+	s2 := s1[3:5]
+
+	fmt.Println(s1)
+	fmt.Println(s2)
 }
