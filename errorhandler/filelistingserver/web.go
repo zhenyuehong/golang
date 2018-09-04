@@ -4,6 +4,7 @@ import (
 	"golang/errorhandler/filelistingserver/filelisting"
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 )
 
