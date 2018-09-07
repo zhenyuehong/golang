@@ -24,9 +24,9 @@ func main() {
 
 	//还有一种情况，当text是多行的时候，这样只能打印出第一个邮箱,这样我们就不能用FindString，要用
 	text := `my email is hzycyq@gmail.com.cn
-my email1 is hzycyq@abc.com
-my email2 is hzycyq@qq.com
-`
+			my email1 is hzycyq@abc.com
+			my email2 is hzycyq@qq.com
+			`
 	res := regexp.MustCompile(`([a-zA-Z0-9]+)@([a-zA-Z0-9]+)(\.[a-zA-Z0-9.]+)`)
 
 	//findString := res.FindString(text)
@@ -36,5 +36,6 @@ my email2 is hzycyq@qq.com
 	findString := res.FindAllStringSubmatch(text, -1)
 	for _, val := range findString {
 		fmt.Println(val)
+		//fmt.Println(val[0])
 	}
 }

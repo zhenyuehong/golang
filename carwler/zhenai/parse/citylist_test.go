@@ -40,7 +40,7 @@ func TestParseCityList(t *testing.T) {
 
 	for i, val := range expectItems {
 		if result.Items[i].(string) != val {
-			t.Errorf("expected item %d : %s ; but was %s",
+			t.Errorf("expected city %d : %s ; but was %s",
 				i, val, result.Items[i].(string))
 		}
 	}
