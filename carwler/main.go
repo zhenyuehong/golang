@@ -7,7 +7,7 @@ import (
 
 //提取珍爱网 城市和链接
 func main() {
-	engine.Run(engine.Request{
+	engine.SimpleEngine{}.Run(engine.Request{
 		Url:        "http://www.zhenai.com/zhenghun",
 		ParserFunc: parse.ParseCityList,
 	})
