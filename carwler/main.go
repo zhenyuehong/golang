@@ -2,6 +2,7 @@ package main
 
 import (
 	"golang/carwler/engine"
+	"golang/carwler/persist"
 	"golang/carwler/scheduler"
 	"golang/carwler/zhenai/parse"
 )
@@ -17,14 +18,15 @@ func main() {
 		//Scheduler:   &scheduler.SimpleScheduler{},
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
+		ItemChan:    persist.ItemSaver(),
 	}
-	//e.Run(engine.Request{
-	//	Url:        "http://www.zhenai.com/zhenghun",
-	//	ParserFunc: parse.ParseCityList,
-	//})
-
 	e.Run(engine.Request{
-		Url:        "http://www.zhenai.com/zhenghun/shanghai",
-		ParserFunc: parse.ParseCity,
+		Url:        "http://www.zhenai.com/zhenghun",
+		ParserFunc: parse.ParseCityList,
 	})
+
+	//e.Run(engine.Request{
+	//	Url:        "http://www.zhenai.com/zhenghun/shanghai",
+	//	ParserFunc: parse.ParseCity,
+	//})
 }

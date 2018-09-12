@@ -1,10 +1,9 @@
 package engine
 
-import "log"
-
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
+	ItemChan    chan interface{}
 }
 type Scheduler interface {
 	ReadNotifier
@@ -31,12 +30,20 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		e.Scheduler.Submit(r)
 	}
 
-	itemCount := 0
+	//itemCount := 0
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			log.Printf("got item %d: %v", itemCount, item)
-			itemCount++
+			//log.Printf("got item %d: %v", itemCount, item)
+			//itemCount++
+
+			//save(item)  这样不行，这个要马上脱手，不能做复杂的io操作
+			//go save(item) 这样可行，可以让他在后台执行save 操作
+			//go func() {save(itemChan <- item)}()  这样也可行，用goroutine的方法执行操作,我们将采用这种方法进行操作
+			//保存 item 数据
+			go func() {
+				e.ItemChan <- item
+			}()
 		}
 		for _, request := range result.Requests {
 			e.Scheduler.Submit(request)
