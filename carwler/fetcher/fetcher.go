@@ -8,12 +8,17 @@ import (
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"time"
 )
 
 //负责从网上抓取一些数据
+
+//为了防止获取速度过快，被对方网站卡住，我们设置rate limiter 限定一下
+var rateLimiter = time.Tick(10 * time.Millisecond) //100ms
+//这里多个任务一起抢rateLimiter
 func Fetch(url string) ([]byte, error) {
+	<-rateLimiter
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -41,7 +46,7 @@ func DetermineEncoding(reader *bufio.Reader) encoding.Encoding {
 	bytes, err := reader.Peek(1024)
 	if err != nil {
 		//panic(err)
-		log.Printf("fetch error: %v", err)
+		//log.Printf("fetch error: %v", err)
 		//返回默认的utf8编码
 		return unicode.UTF8
 	}
