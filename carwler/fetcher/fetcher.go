@@ -19,11 +19,33 @@ var rateLimiter = time.Tick(10 * time.Millisecond) //100ms
 //这里多个任务一起抢rateLimiter
 func Fetch(url string) ([]byte, error) {
 	<-rateLimiter
-	resp, err := http.Get(url)
+	//resp, err := http.Get(url)
+	//resp.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36")
+	//if err != nil {
+	//	return nil, err
+	//}
+	//defer resp.Body.Close()
+
+	//防止403 err
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36")
+
+	client := http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			fmt.Println("Redirect:", req)
+			return nil
+		},
+	}
+	resp, err := client.Do(request)
+
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("wronf status code: %d", resp.StatusCode)
 	}
