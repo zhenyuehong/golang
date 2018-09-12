@@ -1,7 +1,6 @@
 package parse
 
 import (
-	"fmt"
 	"golang/carwler/engine"
 	"regexp"
 )
@@ -17,8 +16,7 @@ func ParseCity(contents []byte) engine.ParseResult {
 	for _, m := range matches {
 		//这里m[2]是拷贝出来的，为了解决m(2) 都只指向一个人的问题
 		name := string(m[2])
-		fmt.Println()
-		result.Items = append(result.Items, "User "+name)
+		//result.Items = append(result.Items, "User "+name)
 		result.Requests = append(result.Requests, engine.Request{
 			Url: string(m[1]),
 			//ParserFunc:nil,//这里要进行下一个页面的抓取，这里为了先让他编译通过，暂时设置为nil
@@ -32,7 +30,6 @@ func ParseCity(contents []byte) engine.ParseResult {
 
 	matches = cityUrlRe.FindAllSubmatch(contents, -1)
 	for _, m := range matches {
-		//result.Items = append(result.Items, string(m[2]))
 		result.Requests = append(result.Requests, engine.Request{
 			Url:        string(m[1]),
 			ParserFunc: ParseCity,
