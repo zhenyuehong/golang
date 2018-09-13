@@ -2,7 +2,6 @@ package persist
 
 import (
 	"context"
-	"fmt"
 	"gopkg.in/olivere/elastic.v5"
 	"log"
 )
@@ -16,7 +15,11 @@ func ItemSaver() chan interface{} {
 			item := <-out
 			log.Printf("Item Saver : got item #%d: %v", itemCount, item)
 			itemCount++
-			saveItem(item)
+			_, err := saveItem(item)
+			if err != nil {
+				log.Printf("item saver err: error saving item %v: %v",
+					item, err)
+			}
 		}
 
 	}()
@@ -40,6 +43,6 @@ func saveItem(item interface{}) (id string, err error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Printf("%+v/n", resp)
+	//fmt.Printf("%+v/n", resp)
 	return resp.Id, nil
 }
