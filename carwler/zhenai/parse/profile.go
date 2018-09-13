@@ -22,8 +22,11 @@ var hukouRe = regexp.MustCompile(`<td><span class="label">籍贯：</span>([^<]+
 var xingzuoRe = regexp.MustCompile(`<td><span class="label">星座：</span>([^<]+)</td>`)
 var houseRe = regexp.MustCompile(`<td><span class="label">住房条件：</span><span field="">([^<]+)</span></td>`)
 var carRe = regexp.MustCompile(`<td><span class="label">是否购车：</span><span field="">([^<]+)</span></td>`)
+var idUrlRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
-func ParseProfile(contents []byte, name string) engine.ParseResult {
+var guessRe = regexp.MustCompile(`<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`)
+
+func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
 	profile := model.Profile{}
 	if age, err := strconv.Atoi(extractString(contents, ageRe)); err == nil {
 		profile.Age = age
@@ -49,7 +52,36 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 	profile.Car = extractString(contents, carRe)
 
 	result := engine.ParseResult{
-		Items: []interface{}{profile},
+		Items: []engine.Item{
+			{
+				Url:     url,
+				Type:    "zhenai",
+				Id:      extractString([]byte(url), idUrlRe),
+				Payload: profile,
+			},
+		},
+	}
+
+	matches := guessRe.FindAllSubmatch(contents, -1)
+	for _, m := range matches {
+		////这里m[2]是拷贝出来的，为了解决m(2) 都只指向一个人的问题
+		//name := string(m[2])
+		////url 同理
+		//url := string(m[1])
+		////result.Items = append(result.Items, "User "+name)
+		result.Requests = append(result.Requests, engine.Request{
+			//Url: url,
+			//ParserFunc:nil,//这里要进行下一个页面的抓取，这里为了先让他编译通过，暂时设置为nil
+			//ParserFunc: func(c []byte) engine.ParseResult {
+			//			//	return ParseProfile(c, url, name)
+			//			//	//这里m[2] 不是马上运行，而是等到这个循环结束后才排到它，所以在这里用M(2)，早就不是指向这个人了
+			//			//	//所以要把M(2)拷贝出来 name := string(m[2])
+			//			//},
+			//ParserFunc: ProfileParser(url, name),
+
+			Url:        string(m[1]),
+			ParserFunc: ProfileParser(string(m[2])),
+		})
 	}
 	return result
 
@@ -61,5 +93,11 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 		return string(match[1])
 	} else {
 		return ""
+	}
+}
+
+func ProfileParser(name string) engine.ParserFunc {
+	return func(c []byte, url string) engine.ParseResult {
+		return ParseProfile(c, url, name)
 	}
 }

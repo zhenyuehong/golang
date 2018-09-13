@@ -3,8 +3,6 @@ package engine
 //单任务版 engine
 import (
 	"fmt"
-	"golang/carwler/fetcher"
-	"log"
 )
 
 type SimpleEngine struct {
@@ -28,7 +26,7 @@ func (SimpleEngine) Run(seeds ...Request) {
 		//}
 		//parserResult := r.ParserFunc(body)
 
-		parserResult, err := worker(r)
+		parserResult, err := Worker(r)
 		if err != nil {
 			continue
 		}
@@ -38,15 +36,4 @@ func (SimpleEngine) Run(seeds ...Request) {
 			fmt.Printf("got item %v\n", item)
 		}
 	}
-}
-
-func worker(r Request) (ParseResult, error) {
-	//print url
-	//log.Printf("fetching url: %s", r.Url)
-	body, err := fetcher.Fetch(r.Url)
-	if err != nil {
-		log.Printf("fetcher error: fether url %s, %v", r.Url, err)
-		return ParseResult{}, err
-	}
-	return r.ParserFunc(body), nil
 }

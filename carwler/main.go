@@ -14,11 +14,15 @@ func main() {
 	//	ParserFunc: parse.ParseCityList,
 	//})
 
+	itemSaver, err := persist.ItemSaver("dating_profile")
+	if err != nil {
+		panic(err)
+	}
 	e := engine.ConcurrentEngine{
 		//Scheduler:   &scheduler.SimpleScheduler{},
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-		ItemChan:    persist.ItemSaver(),
+		ItemChan:    itemSaver,
 	}
 	e.Run(engine.Request{
 		Url:        "http://www.zhenai.com/zhenghun",

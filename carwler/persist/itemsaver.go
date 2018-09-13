@@ -2,20 +2,32 @@ package persist
 
 import (
 	"context"
+	"errors"
+	"golang/carwler/engine"
 	"gopkg.in/olivere/elastic.v5"
 	"log"
 )
 
-func ItemSaver() chan interface{} {
+func ItemSaver(index string) (chan engine.Item, error) {
+
+	client, err := elastic.NewClient(
+		//must turn off sniff in docker
+		elastic.SetSniff(false), //维护集群的状态
+		//elastic.SetURL() //这个可以省略，省略即默认9200端口
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	//item saver 将通过 OUT 实现和engine直接进行传递
-	out := make(chan interface{})
+	out := make(chan engine.Item)
 	go func() {
 		itemCount := 0
 		for {
 			item := <-out
 			log.Printf("Item Saver : got item #%d: %v", itemCount, item)
 			itemCount++
-			_, err := saveItem(item)
+			err := saveItem(client, index, item)
 			if err != nil {
 				log.Printf("item saver err: error saving item %v: %v",
 					item, err)
@@ -23,26 +35,26 @@ func ItemSaver() chan interface{} {
 		}
 
 	}()
-	return out
+	return out, nil
 }
 
-func saveItem(item interface{}) (id string, err error) {
-	client, err := elastic.NewClient(
-		//must turn off sniff in docker
-		elastic.SetSniff(false), //维护集群的状态
-		//elastic.SetURL() //这个可以省略，省略即默认9200端口
-	)
-	if err != nil {
-		return "", err
+func saveItem(client *elastic.Client, index string, item engine.Item) error {
+
+	if item.Type == "" {
+		return errors.New("must supply Type")
 	}
 
 	//client.Index()  用来创建或者修改数据
-	resp, err := client.Index().
-		Index("dating_profile").Type("zhenai").
-		BodyJson(item).Do(context.Background())
-	if err != nil {
-		return "", err
+	indexService := client.Index().
+		Index(index).
+		Type(item.Type).Id(item.Id).
+		BodyJson(item)
+	if item.Id != "" {
+		indexService.Id(item.Id)
 	}
-	//fmt.Printf("%+v/n", resp)
-	return resp.Id, nil
+	_, err := indexService.Do(context.Background())
+	if err != nil {
+		return err
+	}
+	return nil
 }
