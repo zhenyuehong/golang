@@ -3,7 +3,7 @@ package engine
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
-	ItemChan    chan interface{}
+	ItemChan    chan Item
 }
 type Scheduler interface {
 	ReadNotifier
@@ -41,9 +41,11 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 			//go save(item) 这样可行，可以让他在后台执行save 操作
 			//go func() {save(itemChan <- item)}()  这样也可行，用goroutine的方法执行操作,我们将采用这种方法进行操作
 			//保存 item 数据
-			go func() {
-				e.ItemChan <- item
-			}()
+			if !isDuplicate(item.Url) {
+				go func() {
+					e.ItemChan <- item
+				}()
+			}
 		}
 		for _, request := range result.Requests {
 			e.Scheduler.Submit(request)
@@ -66,6 +68,17 @@ func createWorker(in chan Request, out chan ParseResult, ready ReadNotifier) {
 			out <- result
 		}
 	}()
+}
+
+//去重
+var visitedUrls = make(map[string]bool)
+
+func isDuplicate(url string) bool {
+	if visitedUrls[url] {
+		return true
+	}
+	visitedUrls[url] = true
+	return false
 }
 
 //no queue
