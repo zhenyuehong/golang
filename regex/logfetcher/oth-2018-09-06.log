@@ -1,0 +1,35 @@
+[2018-09-06T13:33:35.440] [INFO] oth - 生成Word文档的返回信息 { fileName: 'GIX888-contract-0871-20180905.docx',
+  code: '0',
+  msg: '成功',
+  url: 'http://sps.gf.com.cn/ftpfiles/bword/GIX888-contract-0871-20180905.docx' }
+[2018-09-06T13:33:35.787] [INFO] oth - 读取文件流地址： D:/files/sps/twordpdf/GIX888-contract-0871-20180905.docx
+[2018-09-06T13:33:35.791] [INFO] oth - 下载地址： ftpfiles/bword/GIX888-contract-0871-20180905.docx
+[2018-09-06T13:33:35.792] [INFO] oth - 上传地址： D:/files/sps/twordpdf/GIX888-contract-0871-20180905.docx
+[2018-09-06T13:33:46.218] [INFO] oth - 生成Word文档的返回信息 { fileName: 'GIX888-contract-0871-20180905.docx',
+  code: '0',
+  msg: '成功',
+  url: 'http://sps.gf.com.cn/ftpfiles/bword/GIX888-contract-0871-20180905.docx' }
+[2018-09-06T13:33:46.262] [INFO] oth - 读取文件流地址： D:/files/sps/twordpdf/GIX888-contract-0871-20180905.docx
+[2018-09-06T13:33:46.264] [INFO] oth - 下载地址： ftpfiles/bword/GIX888-contract-0871-20180905.docx
+[2018-09-06T13:33:46.265] [INFO] oth - 上传地址： D:/files/sps/twordpdf/GIX888-contract-0871-20180905.docx
+[2018-09-06T13:47:54.411] [INFO] oth - 读取文件流地址： D:/files/sps/twordpdf/GIX886-contract-7537-20180831.pdf
+[2018-09-06T13:47:54.421] [INFO] oth - 下载地址： ftpfiles/bsealpdf/GIX886-contract-7537-20180831.pdf
+[2018-09-06T13:47:54.429] [INFO] oth - 上传地址： D:/files/sps/twordpdf/GIX886-contract-7537-20180831.pdf
+[2018-09-06T13:48:19.222] [INFO] oth - { document_id: 'docid:6FEBB63D0FDD43809683B0D97554EBDB' }
+[2018-09-06T14:03:55.181] [INFO] oth - { document_id: 'docid:3FB97585E4374930AD6D2E64AFBD94F4' }
+[2018-09-06T14:03:58.227] [INFO] oth - 生成Word文档的返回信息 { fileName: 'GIX889-contract-94F4-20180820.docx',
+  code: '0',
+  msg: '成功',
+  url: 'http://sps.gf.com.cn/ftpfiles/bword/GIX889-contract-94F4-20180820.docx' }
+[2018-09-06T14:03:58.585] [INFO] oth - 读取文件流地址： D:/files/sps/twordpdf/GIX889-contract-94F4-20180820.docx
+[2018-09-06T14:03:58.587] [INFO] oth - 下载地址： ftpfiles/bword/GIX889-contract-94F4-20180820.docx
+[2018-09-06T14:03:58.589] [INFO] oth - 上传地址： D:/files/sps/twordpdf/GIX889-contract-94F4-20180820.docx
+[2018-09-06T14:04:16.824] [INFO] oth - { document_id: 'docid:3FB97585E4374930AD6D2E64AFBD94F4' }
+[2018-09-06T14:04:22.117] [INFO] oth - { document_id: 'docid:7CC8039F955040E1803FE3B6E1656F55' }
+[2018-09-06T14:04:34.363] [INFO] oth - 生成Word文档的返回信息 { fileName: 'GIX888-contract-3968-20180820.docx',
+  code: '0',
+  msg: '成功',
+  url: 'http://sps.gf.com.cn/ftpfiles/bword/GIX888-contract-3968-20180820.docx' }
+[2018-09-06T14:04:34.396] [INFO] oth - 读取文件流地址： D:/files/sps/twordpdf/GIX888-contract-3968-20180820.docx
+[2018-09-06T14:04:34.398] [INFO] oth - 下载地址： ftpfiles/bword/GIX888-contract-3968-20180820.docx
+[2018-09-06T14:04:34.400] [INFO] oth - 上传地址： D:/files/sps/twordpdf/GIX888-contract-3968-20180820.docx

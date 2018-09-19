@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>elastic search搜索</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>珍爱网用户搜索</h1>
+<div align="middle">
+    <label for="search-text">搜索列表内容</label>
+{{/*<input type="text" id="search-text" placeholder="美食大搜索" class="search-box">*/}}
+    <div align="middle">
+        <form method="get">
+            <input type="text" name="q"
+                   value="{{.Query}}" maxlength="100" style="width: 500px">
+            <button type="submit">search</button>
+        </form>
+    </div>
+
+    <table id="table">
+        <tbody>
+        {{range .Items}}
+        <tr>
+            <td><a href="{{.Url}}">{{.Payload.Name}}</a></td>
+        {{with .Payload}}
+            <td>{{.Gender}}</td>
+            <td>{{.Age}}</td>
+            <td>{{.Height}}</td>
+            <td>{{.Weight}}</td>
+            <td>{{.Income}}</td>
+            <td>{{.Education}}</td>
+            <td>{{.Occupation}}</td>
+            <td>{{.Hukou}}</td>
+            <td>{{.Xingzuo}}</td>
+            <td>{{.House}}</td>
+            <td>{{.Car}}</td>
+        {{end}}
+        </tr>
+        {{else}}
+        <div>没有找到相关用户</div>
+        {{end}}
+        </tbody>
+    </table>
+    <div align="middle">
+    {{/*大于等于0*/}}
+    {{if ge .PreFrom 0}}
+        <a href="search?q={{ .Query}}&from={{ .PreFrom}}">上一页</a>
+    {{end}}
+        <a href="search?q={{ .Query}}&from={{ .NextFrom}}">下一页</a>
+    </div>
+
+    <h2>共为您找到相关的结果约为{{.Hits}}个。显示从{{.Start}}起共{{len .Items}}个.</h2>
+
+</div>
+
+{{/*<script type="text/javascript" src='js/jquery.min.js'></script>*/}}
+{{/*<script type="text/javascript" src="js/index.js"></script>*/}}
+</body>
+</html>
