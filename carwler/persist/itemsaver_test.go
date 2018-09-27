@@ -39,7 +39,7 @@ func TestItemSaver(t *testing.T) {
 	const index = "dating_test"
 
 	//存数据
-	err = saveItem(client, index, expected)
+	err = SaveItem(client, index, expected)
 	if err != nil {
 		panic(err)
 	}
