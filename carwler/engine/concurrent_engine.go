@@ -1,10 +1,14 @@
 package engine
 
 type ConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
-	ItemChan    chan Item
+	Scheduler        Scheduler
+	WorkerCount      int
+	ItemChan         chan Item
+	RequestProcessor Processor
 }
+
+type Processor func(r Request) (ParseResult, error)
+
 type Scheduler interface {
 	ReadNotifier
 	Submit(Request)
@@ -23,10 +27,13 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	e.Scheduler.Run()
 
 	for i := 0; i < e.WorkerCount; i++ {
-		createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
+		e.createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
 	}
 
 	for _, r := range seeds {
+		if isDuplicate(r.Url) {
+			continue
+		}
 		e.Scheduler.Submit(r)
 	}
 
@@ -41,19 +48,21 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 			//go save(item) 这样可行，可以让他在后台执行save 操作
 			//go func() {save(itemChan <- item)}()  这样也可行，用goroutine的方法执行操作,我们将采用这种方法进行操作
 			//保存 item 数据
-			if !isDuplicate(item.Url) {
-				go func() {
-					e.ItemChan <- item
-				}()
-			}
+			go func() {
+				e.ItemChan <- item
+			}()
+
 		}
 		for _, request := range result.Requests {
+			if isDuplicate(request.Url) {
+				continue
+			}
 			e.Scheduler.Submit(request)
 		}
 	}
 }
 
-func createWorker(in chan Request, out chan ParseResult, ready ReadNotifier) {
+func (e *ConcurrentEngine) createWorker(in chan Request, out chan ParseResult, ready ReadNotifier) {
 	//func createWorker(in chan Request, out chan ParseResult, s Scheduler) {
 	go func() {
 		for {
@@ -61,7 +70,8 @@ func createWorker(in chan Request, out chan ParseResult, ready ReadNotifier) {
 			//s.WorkerReady(in)
 			ready.WorkerReady(in)
 			request := <-in
-			result, err := Worker(request)
+			//result, err := Worker(request)
+			result, err := e.RequestProcessor(request) //call rpc
 			if err != nil {
 				continue
 			}
