@@ -28,7 +28,8 @@ func ParseCity(contents []byte, _ string) engine.ParseResult {
 			//			//	//所以要把M(2)拷贝出来 name := string(m[2])
 			//			//},
 			//ParserFunc: ProfileParser(name),
-			Url:        string(m[1]),
+			Url: string(m[1]),
+			//Parser: NewProfileParser(string(m[2])),
 			ParserFunc: ProfileParser(string(m[2])),
 		})
 	}
@@ -36,7 +37,8 @@ func ParseCity(contents []byte, _ string) engine.ParseResult {
 	matches = cityUrlRe.FindAllSubmatch(contents, -1)
 	for _, m := range matches {
 		result.Requests = append(result.Requests, engine.Request{
-			Url:        string(m[1]),
+			Url: string(m[1]),
+			//Parser: engine.NewFuncParser(ParseCity,"ParseCity"),
 			ParserFunc: ParseCity,
 		})
 	}

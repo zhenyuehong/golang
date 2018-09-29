@@ -25,7 +25,8 @@ func main() {
 		ItemChan:    itemSaver,
 	}
 	e.Run(engine.Request{
-		Url:        "http://www.zhenai.com/zhenghun",
+		Url: "http://www.zhenai.com/zhenghun",
+		//Parser: engine.NewFuncParser(parse.ParseCityList, "ParseCityList"),
 		ParserFunc: parse.ParseCityList,
 	})
 

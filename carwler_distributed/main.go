@@ -12,7 +12,8 @@ import (
 //分布式  抽离ItemSaver
 //提取珍爱网 城市和链接
 func main() {
-
+	//开client之前先把server启动
+	//carwler_distributed/persist/server/main.go
 	itemSaver, err := client.ItemSaver(fmt.Sprintf(":%d", config.ItemSaverPort))
 	if err != nil {
 		panic(err)
@@ -24,7 +25,8 @@ func main() {
 		ItemChan:    itemSaver,
 	}
 	e.Run(engine.Request{
-		Url:        "http://www.zhenai.com/zhenghun",
+		Url: "http://www.zhenai.com/zhenghun",
+		//Parser: engine.NewFuncParser(parse.ParseCityList,"ParseCityList"),
 		ParserFunc: parse.ParseCityList,
 	})
 
