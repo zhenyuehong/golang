@@ -13,6 +13,6 @@ func Worker(r Request) (ParseResult, error) {
 		log.Printf("fetcher error: fether url %s, %v", r.Url, err)
 		return ParseResult{}, err
 	}
-	return r.ParserFunc(body, r.Url), nil
-	//return r.Parser.Parse(body, r.Url), nil
+	//return r.ParserFunc(body, r.Url), nil
+	return r.Parser.Parse(body, r.Url), nil
 }

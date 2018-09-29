@@ -2,6 +2,7 @@ package parse
 
 import (
 	"golang/carwler/engine"
+	"golang/carwler_distributed/config"
 	"regexp"
 )
 
@@ -18,8 +19,8 @@ func ParseCityList(contents []byte, _ string) engine.ParseResult {
 			Url: string(m[1]),
 			//ParserFunc:nil,//这里要进行下一个页面的抓取，这里为了先让他编译通过，暂时设置为nil
 			//ParserFunc: engine.NilParse,
-			//Parser: engine.NewFuncParser(ParseCity,"ParseCity"),
-			ParserFunc: ParseCity,
+			//ParserFunc: ParseCity,
+			Parser: engine.NewFuncParser(ParseCity, config.ParseCity),
 		})
 	}
 	return result

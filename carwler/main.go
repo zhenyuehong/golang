@@ -5,6 +5,7 @@ import (
 	"golang/carwler/persist"
 	"golang/carwler/scheduler"
 	"golang/carwler/zhenai/parse"
+	"golang/carwler_distributed/config"
 )
 
 //提取珍爱网 城市和链接
@@ -26,8 +27,8 @@ func main() {
 	}
 	e.Run(engine.Request{
 		Url: "http://www.zhenai.com/zhenghun",
-		//Parser: engine.NewFuncParser(parse.ParseCityList, "ParseCityList"),
-		ParserFunc: parse.ParseCityList,
+		//ParserFunc: parse.ParseCityList,
+		Parser: engine.NewFuncParser(parse.ParseCityList, config.ParseCityList),
 	})
 
 	//e.Run(engine.Request{
