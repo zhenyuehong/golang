@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"golang/carwler_distributed/config"
 	"golang/carwler_distributed/persist"
@@ -9,8 +10,15 @@ import (
 	"log"
 )
 
+var port = flag.Int("port", 0, "the port for me to listen on")
+
 func main() {
-	log.Fatal(serveRpc(fmt.Sprintf(":%d", config.ItemSaverPort), config.ElasticIndex))
+	flag.Parse()
+	if *port == 0 {
+		log.Printf("must specify a port")
+		return
+	}
+	log.Fatal(serveRpc(fmt.Sprintf(":%d", *port), config.ElasticIndex))
 }
 
 func serveRpc(host, index string) error {

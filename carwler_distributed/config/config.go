@@ -2,8 +2,8 @@ package config
 
 const (
 	//service port
-	ItemSaverPort = 1234
-	WorkerPort0   = 9000
+	//ItemSaverPort = 1234
+	//WorkerPort0   = 9000
 
 	//Elastic Search
 	ElasticIndex = "dating_profile"
@@ -17,4 +17,7 @@ const (
 	ParseCityList = "ParseCityList"
 	ParseProfile  = "ProfileParser"
 	NilParser     = "NilParser"
+
+	//Rate limiting
+	Qps = 20
 )

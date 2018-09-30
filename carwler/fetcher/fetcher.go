@@ -7,7 +7,9 @@ import (
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
+	"golang/carwler_distributed/config"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -15,10 +17,12 @@ import (
 //负责从网上抓取一些数据
 
 //为了防止获取速度过快，被对方网站卡住，我们设置rate limiter 限定一下
-var rateLimiter = time.Tick(10 * time.Millisecond) //100ms
+//var rateLimiter = time.Tick(10 * time.Millisecond) //100ms
+var rateLimiter = time.Tick(time.Second / config.Qps) //100ms
 //这里多个任务一起抢rateLimiter
 func Fetch(url string) ([]byte, error) {
 	<-rateLimiter
+	log.Printf("fetching url %s", url)
 	//resp, err := http.Get(url)
 	//resp.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36")
 	//if err != nil {
