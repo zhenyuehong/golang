@@ -56,16 +56,16 @@ type FuncParser struct {
 	name   string
 }
 
-func (f FuncParser) Parse(contents []byte, url string) ParseResult {
+func (f *FuncParser) Parse(contents []byte, url string) ParseResult {
 	return f.parser(contents, url)
 }
 
-func (f FuncParser) Serialize() (name string, args interface{}) {
+func (f *FuncParser) Serialize() (name string, args interface{}) {
 	return f.name, nil
 }
 
-func NewFuncParser(p ParserFunc, name string) FuncParser {
-	return FuncParser{
+func NewFuncParser(p ParserFunc, name string) *FuncParser {
+	return &FuncParser{
 		parser: p,
 		name:   name,
 	}

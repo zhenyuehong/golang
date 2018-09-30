@@ -108,16 +108,16 @@ type ProfileParser struct {
 	userName string
 }
 
-func (p ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
+func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
 	return parseProfile(contents, url, p.userName)
 }
 
-func (p ProfileParser) Serialize() (name string, args interface{}) {
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
 	return config.ParseProfile, p.userName
 }
 
-func NewProfileParser(name string) ProfileParser {
-	return ProfileParser{
+func NewProfileParser(name string) *ProfileParser {
+	return &ProfileParser{
 		userName: name,
 	}
 }
