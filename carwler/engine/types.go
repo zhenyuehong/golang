@@ -57,7 +57,7 @@ type FuncParser struct {
 }
 
 func (f FuncParser) Parse(contents []byte, url string) ParseResult {
-	return f.Parse(contents, url)
+	return f.parser(contents, url)
 }
 
 func (f FuncParser) Serialize() (name string, args interface{}) {
